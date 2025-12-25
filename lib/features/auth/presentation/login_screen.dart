@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../l10n/manual_localizations.dart';
 import 'auth_controller.dart';
 
 import '../domain/auth_user.dart';
@@ -59,13 +60,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 40),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.emailLabel),
                     validator: (value) => value!.isEmpty ? 'Enter email' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.passwordLabel),
                     obscureText: true,
                     validator: (value) =>
                         value!.isEmpty ? 'Enter password' : null,
@@ -83,11 +86,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               );
                         }
                       },
-                      child: const Text('Login'),
+                      child: Text(AppLocalizations.of(context)!.loginButton),
                     ),
                   TextButton(
                     onPressed: () => context.push('/register'),
-                    child: const Text('Create Account'),
+                    child: Text(AppLocalizations.of(context)!.registerPrompt),
                   ),
                 ],
               ),

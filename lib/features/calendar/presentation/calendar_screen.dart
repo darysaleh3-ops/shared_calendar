@@ -5,6 +5,7 @@ import '../../groups/presentation/groups_controller.dart';
 import 'events_controller.dart';
 import '../domain/event.dart';
 import '../../auth/domain/auth_user.dart';
+import '../../../l10n/manual_localizations.dart';
 import '../../auth/presentation/auth_controller.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
@@ -145,14 +146,20 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   ];
 
   Widget _buildCalendar(Map<DateTime, List<CalendarEvent>> eventsMap) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = Theme.of(context).cardTheme.color;
+    final textColor = Theme.of(context).colorScheme.onSurface;
+    final subTextColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B), // Slate 800
+        color: cardColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -160,6 +167,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       ),
       padding: const EdgeInsets.only(bottom: 12),
       child: TableCalendar<CalendarEvent>(
+        locale: Localizations.localeOf(context).toString(),
         firstDay: DateTime.utc(2020, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
         focusedDay: _focusedDay,
@@ -182,19 +190,19 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         },
         // Styles
         shouldFillViewport: false,
-        headerStyle: const HeaderStyle(
+        headerStyle: HeaderStyle(
           titleCentered: true,
           formatButtonVisible: false,
           titleTextStyle: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-          leftChevronIcon: Icon(Icons.chevron_left, color: Color(0xFF94A3B8)),
-          rightChevronIcon: Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
+              fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
+          leftChevronIcon: Icon(Icons.chevron_left, color: subTextColor),
+          rightChevronIcon: Icon(Icons.chevron_right, color: subTextColor),
         ),
-        calendarStyle: const CalendarStyle(
+        calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
           weekendTextStyle:
-              TextStyle(color: Color(0xFFF472B6)), // Pink for weekend
-          defaultTextStyle: TextStyle(color: Color(0xFFE2E8F0)), // Slate 200
+              const TextStyle(color: Color(0xFFF472B6)), // Pink for weekend
+          defaultTextStyle: TextStyle(color: textColor),
           markersMaxCount: 4,
           markerSize: 6.0,
         ),
@@ -303,16 +311,22 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         final endTime =
             '${event.endDateTime.hour.toString().padLeft(2, '0')}:${event.endDateTime.minute.toString().padLeft(2, '0')}';
 
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final cardColor = Theme.of(context).cardTheme.color;
+        final textColor = Theme.of(context).colorScheme.onSurface;
+        final subTextColor =
+            isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+
         return InkWell(
           onTap: () => _showEditEventDialog(context, event),
           borderRadius: BorderRadius.circular(20),
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1E293B), // Slate 800
+              color: cardColor,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -327,15 +341,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   children: [
                     Text(
                       startTime,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: textColor),
                     ),
                     Text(
                       endTime,
-                      style: const TextStyle(
-                          fontSize: 12, color: Color(0xFF94A3B8)), // Slate 400
+                      style: TextStyle(fontSize: 12, color: subTextColor),
                     ),
                   ],
                 ),
@@ -365,10 +378,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     children: [
                       Text(
                         event.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: textColor,
                         ),
                       ),
                       if (event.description != null &&
@@ -376,9 +389,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         const SizedBox(height: 4),
                         Text(
                           event.description!,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFFCBD5E1)), // Slate 300
+                              color: isDark
+                                  ? const Color(0xFFCBD5E1)
+                                  : const Color(0xFF64748B)),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -406,68 +421,239 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   }
 
   void _showAddEventDialog(BuildContext context) {
+    if (_selectedDay == null) return;
+
     final titleController = TextEditingController();
-    final descController = TextEditingController();
+    final descriptionController = TextEditingController();
+    TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 0);
+    TimeOfDay endTime = const TimeOfDay(hour: 10, minute: 0);
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Event'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Title')),
-            TextField(
-                controller: descController,
-                decoration: const InputDecoration(labelText: 'Description')),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
-          TextButton(
-              onPressed: () {
-                ref
-                    .read(eventsControllerProvider(widget.groupId).notifier)
-                    .addEvent(
-                      title: titleController.text,
-                      description: descController.text,
-                      start: _selectedDay ?? DateTime.now(),
-                      end: (_selectedDay ?? DateTime.now())
-                          .add(const Duration(hours: 1)),
-                    );
-                Navigator.pop(context);
-              },
-              child: const Text('Add')),
-        ],
-      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.addEventTitle),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: titleController,
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.titleLabel),
+                    ),
+                    TextField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.descriptionLabel),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: startTime,
+                              );
+                              if (time != null) {
+                                setState(() => startTime = time);
+                              }
+                            },
+                            child: Text(
+                                '${AppLocalizations.of(context)!.startTimeLabel}: ${startTime.format(context)}'),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: endTime,
+                              );
+                              if (time != null) {
+                                setState(() => endTime = time);
+                              }
+                            },
+                            child: Text(
+                                '${AppLocalizations.of(context)!.endTimeLabel}: ${endTime.format(context)}'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context)!.cancelButton),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (titleController.text.isNotEmpty) {
+                      final startDateTime = DateTime(
+                        _selectedDay!.year,
+                        _selectedDay!.month,
+                        _selectedDay!.day,
+                        startTime.hour,
+                        startTime.minute,
+                      );
+                      final endDateTime = DateTime(
+                        _selectedDay!.year,
+                        _selectedDay!.month,
+                        _selectedDay!.day,
+                        endTime.hour,
+                        endTime.minute,
+                      );
+
+                      // Basic validation
+                      if (endDateTime.isBefore(startDateTime)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content:
+                                  Text('End time must be after start time')),
+                        );
+                        return;
+                      }
+
+                      ref
+                          .read(
+                              eventsControllerProvider(widget.groupId).notifier)
+                          .addEvent(
+                            title: titleController.text,
+                            description: descriptionController.text,
+                            start: startDateTime,
+                            end: endDateTime,
+                          );
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context)!.addButton),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
   void _showEditEventDialog(BuildContext context, CalendarEvent event) {
     final titleController = TextEditingController(text: event.title);
+    final descriptionController =
+        TextEditingController(text: event.description);
+    TimeOfDay startTime = TimeOfDay.fromDateTime(event.startDateTime);
+    TimeOfDay endTime = TimeOfDay.fromDateTime(event.endDateTime);
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Event'),
-        content: TextField(
-            controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title')),
-        actions: [
-          TextButton(
-              onPressed: () {
-                ref
-                    .read(eventsControllerProvider(widget.groupId).notifier)
-                    .updateEvent(event.copyWith(title: titleController.text));
-                Navigator.pop(context);
-              },
-              child: const Text('Save')),
-        ],
-      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.editEventTitle),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: titleController,
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.titleLabel),
+                    ),
+                    TextField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.descriptionLabel),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: startTime,
+                              );
+                              if (time != null) {
+                                setState(() => startTime = time);
+                              }
+                            },
+                            child: Text(
+                                '${AppLocalizations.of(context)!.startTimeLabel}: ${startTime.format(context)}'),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: endTime,
+                              );
+                              if (time != null) {
+                                setState(() => endTime = time);
+                              }
+                            },
+                            child: Text(
+                                '${AppLocalizations.of(context)!.endTimeLabel}: ${endTime.format(context)}'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context)!.cancelButton),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (titleController.text.isNotEmpty) {
+                      final startDateTime = DateTime(
+                        event.startDateTime.year,
+                        event.startDateTime.month,
+                        event.startDateTime.day,
+                        startTime.hour,
+                        startTime.minute,
+                      );
+                      final endDateTime = DateTime(
+                        event.endDateTime.year,
+                        event.endDateTime.month,
+                        event.endDateTime.day,
+                        endTime.hour,
+                        endTime.minute,
+                      );
+
+                      final updatedEvent = event.copyWith(
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        startDateTime: startDateTime,
+                        endDateTime: endDateTime,
+                      );
+
+                      ref
+                          .read(
+                              eventsControllerProvider(widget.groupId).notifier)
+                          .updateEvent(updatedEvent);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context)!.saveButton),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -475,19 +661,23 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Event?'),
+        title: Text(AppLocalizations.of(context)!.deleteEventConfirm),
+        content: Text(AppLocalizations.of(context)!.deleteEventMessage),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancelButton),
+          ),
           TextButton(
-              onPressed: () {
-                ref
-                    .read(eventsControllerProvider(widget.groupId).notifier)
-                    .deleteEvent(event);
-                Navigator.pop(context);
-              },
-              child: const Text('Delete')),
+            onPressed: () {
+              ref
+                  .read(eventsControllerProvider(widget.groupId).notifier)
+                  .deleteEvent(event);
+              Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.deleteButton,
+                style: const TextStyle(color: Colors.red)),
+          ),
         ],
       ),
     );
@@ -519,8 +709,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     .where((u) => !currentMemberIds.contains(u.id))
                     .toList();
 
-                if (availableToAdd.isEmpty)
+                if (availableToAdd.isEmpty) {
                   return const Text('No new users available to add.');
+                }
 
                 return DropdownButtonFormField<AuthUser>(
                   decoration: const InputDecoration(labelText: 'Select User'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'auth_controller.dart';
+import '../../../l10n/manual_localizations.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -20,7 +21,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.registerTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -30,21 +31,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Display Name'),
-                validator: (value) => value!.isEmpty ? 'Enter name' : null,
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.nameLabel),
+                validator: (value) => value!.isEmpty
+                    ? AppLocalizations.of(context)!.enterNameError
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) => value!.isEmpty ? 'Enter email' : null,
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.emailLabel),
+                validator: (value) => value!.isEmpty
+                    ? AppLocalizations.of(context)!.enterEmailError
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.passwordLabel),
                 obscureText: true,
-                validator: (value) => value!.isEmpty ? 'Enter password' : null,
+                validator: (value) => value!.isEmpty
+                    ? AppLocalizations.of(context)!.enterPasswordError
+                    : null,
               ),
               const SizedBox(height: 24),
               if (state.isLoading)
@@ -60,7 +70,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           );
                     }
                   },
-                  child: const Text('Register'),
+                  child: Text(AppLocalizations.of(context)!.registerButton),
                 ),
             ],
           ),

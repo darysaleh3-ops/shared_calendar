@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'groups_controller.dart';
 import '../../auth/presentation/auth_controller.dart';
+import '../../../l10n/manual_localizations.dart';
 
 class GroupListScreen extends ConsumerWidget {
   const GroupListScreen({super.key});
@@ -22,7 +23,7 @@ class GroupListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Groups'),
+        title: Text(AppLocalizations.of(context)!.myGroupsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -31,24 +32,30 @@ class GroupListScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
-        color: const Color(0xFF202124), // Dark Background
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: groupsAsync.when(
           data: (groups) {
             if (groups.isEmpty) {
-              return const Center(
-                  child: Text('No calendars yet.',
-                      style: TextStyle(color: Colors.white70)));
+              return Center(
+                  child: Text(AppLocalizations.of(context)!.noCalendarsLabel,
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.color
+                              ?.withOpacity(0.7))));
             }
+            final textColor = Theme.of(context).textTheme.bodyMedium?.color;
             return ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
                 ExpansionTile(
-                  title: const Text('My Calendars',
+                  title: Text(AppLocalizations.of(context)!.myCalendarsTitle,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white)),
+                          fontWeight: FontWeight.bold, color: textColor)),
                   initiallyExpanded: true,
-                  iconColor: Colors.white70,
-                  collapsedIconColor: Colors.white70,
+                  iconColor: textColor?.withOpacity(0.7),
+                  collapsedIconColor: textColor?.withOpacity(0.7),
                   children: groups.map((group) {
                     return ListTile(
                       dense: true,
@@ -56,37 +63,37 @@ class GroupListScreen extends ConsumerWidget {
                         value: true,
                         onChanged: (v) {}, // Mock toggle
                         fillColor:
-                            MaterialStateProperty.all(const Color(0xFF8AB4F8)),
+                            WidgetStateProperty.all(const Color(0xFF8AB4F8)),
                         checkColor: Colors.black,
                       ),
-                      title: Text(group.name,
-                          style: const TextStyle(color: Colors.white)),
+                      title:
+                          Text(group.name, style: TextStyle(color: textColor)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                       // Make the whole tile clickable to navigate
                       onTap: () => context.push('/groups/${group.id}/calendar'),
                       trailing: IconButton(
-                        icon: const Icon(Icons.settings,
-                            size: 16, color: Colors.white30),
+                        icon: Icon(Icons.settings,
+                            size: 16, color: textColor?.withOpacity(0.3)),
                         onPressed: () {}, // Settings placeholder
                       ),
                     );
                   }).toList(),
                 ),
                 // Placeholder for "Other Calendars" section if needed
-                const ExpansionTile(
-                  title: Text('Other Calendars',
+                ExpansionTile(
+                  title: Text(AppLocalizations.of(context)!.otherCalendarsTitle,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white)),
+                          fontWeight: FontWeight.bold, color: textColor)),
                   initiallyExpanded: true,
-                  iconColor: Colors.white70,
-                  collapsedIconColor: Colors.white70,
+                  iconColor: textColor?.withOpacity(0.7),
+                  collapsedIconColor: textColor?.withOpacity(0.7),
                   children: [
                     ListTile(
                       dense: true,
                       leading: Icon(Icons.check_box_outline_blank,
-                          color: Colors.white38),
-                      title: Text('Holidays (Mock)',
-                          style: TextStyle(color: Colors.white70)),
+                          color: textColor?.withOpacity(0.38)),
+                      title: Text(AppLocalizations.of(context)!.holidaysLabel,
+                          style: TextStyle(color: textColor?.withOpacity(0.7))),
                     )
                   ],
                 ),
@@ -94,7 +101,8 @@ class GroupListScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('Error loading calendars')),
+          error: (err, stack) => Center(
+              child: Text(AppLocalizations.of(context)!.errorLoadingCalendars)),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -109,15 +117,16 @@ class GroupListScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Create Group'),
+        title: Text(AppLocalizations.of(context)!.createGroupTitle),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(labelText: 'Group Name'),
+          decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.groupNameLabel),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancelButton),
           ),
           TextButton(
             onPressed: () async {
@@ -138,7 +147,7 @@ class GroupListScreen extends ConsumerWidget {
                 }
               }
             },
-            child: const Text('Create'),
+            child: Text(AppLocalizations.of(context)!.createButton),
           ),
         ],
       ),
