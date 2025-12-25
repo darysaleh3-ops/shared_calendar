@@ -157,6 +157,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(24),
+        border: isDark
+            ? null
+            : Border.all(
+                color: const Color(0xFFE2E8F0)), // Add border in Light Mode
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
@@ -324,6 +328,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             decoration: BoxDecoration(
               color: cardColor,
               borderRadius: BorderRadius.circular(20),
+              border: isDark
+                  ? null
+                  : Border.all(
+                      color:
+                          const Color(0xFFE2E8F0)), // Add border in Light Mode
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),

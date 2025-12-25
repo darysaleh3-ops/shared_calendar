@@ -45,16 +45,19 @@ class MainApp extends ConsumerWidget {
         ),
         cardTheme: CardThemeData(
           color: Colors.white,
-          elevation: 2,
-          shadowColor: Colors.black.withOpacity(0.05),
+          elevation: 0, // Flat with border
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
+            side:
+                const BorderSide(color: Color(0xFFE2E8F0)), // Slate 200 Border
           ),
         ),
         dialogTheme: DialogThemeData(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
+            side:
+                const BorderSide(color: Color(0xFFE2E8F0)), // Slate 200 Border
           ),
           titleTextStyle: const TextStyle(
             color: Color(0xFF0F172A),
@@ -64,7 +67,8 @@ class MainApp extends ConsumerWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white,
+          fillColor:
+              const Color(0xFFF8FAFC), // Slate 50 for contrast against White
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: const BorderSide(
