@@ -48,58 +48,69 @@ class GroupListScreen extends ConsumerWidget {
                               ?.withOpacity(0.7))));
             }
             final textColor = Theme.of(context).textTheme.bodyMedium?.color;
-            return ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                ExpansionTile(
-                  title: Text(AppLocalizations.of(context)!.myCalendarsTitle,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: textColor)),
-                  initiallyExpanded: true,
-                  iconColor: textColor?.withOpacity(0.7),
-                  collapsedIconColor: textColor?.withOpacity(0.7),
-                  children: groups.map((group) {
-                    return ListTile(
-                      dense: true,
-                      leading: Checkbox(
-                        value: true,
-                        onChanged: (v) {}, // Mock toggle
-                        fillColor:
-                            WidgetStateProperty.all(const Color(0xFF8AB4F8)),
-                        checkColor: Colors.black,
-                      ),
-                      title:
-                          Text(group.name, style: TextStyle(color: textColor)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                      // Make the whole tile clickable to navigate
-                      onTap: () => context.push('/groups/${group.id}/calendar'),
-                      trailing: IconButton(
-                        icon: Icon(Icons.settings,
-                            size: 16, color: textColor?.withOpacity(0.3)),
-                        onPressed: () {}, // Settings placeholder
-                      ),
-                    );
-                  }).toList(),
-                ),
-                // Placeholder for "Other Calendars" section if needed
-                ExpansionTile(
-                  title: Text(AppLocalizations.of(context)!.otherCalendarsTitle,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: textColor)),
-                  initiallyExpanded: true,
-                  iconColor: textColor?.withOpacity(0.7),
-                  collapsedIconColor: textColor?.withOpacity(0.7),
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: ListView(
+                  padding: const EdgeInsets.all(16.0),
                   children: [
-                    ListTile(
-                      dense: true,
-                      leading: Icon(Icons.check_box_outline_blank,
-                          color: textColor?.withOpacity(0.38)),
-                      title: Text(AppLocalizations.of(context)!.holidaysLabel,
-                          style: TextStyle(color: textColor?.withOpacity(0.7))),
-                    )
+                    ExpansionTile(
+                      title: Text(
+                          AppLocalizations.of(context)!.myCalendarsTitle,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: textColor)),
+                      initiallyExpanded: true,
+                      iconColor: textColor?.withOpacity(0.7),
+                      collapsedIconColor: textColor?.withOpacity(0.7),
+                      children: groups.map((group) {
+                        return ListTile(
+                          dense: true,
+                          leading: Checkbox(
+                            value: true,
+                            onChanged: (v) {}, // Mock toggle
+                            fillColor: WidgetStateProperty.all(
+                                const Color(0xFF8AB4F8)),
+                            checkColor: Colors.black,
+                          ),
+                          title: Text(group.name,
+                              style: TextStyle(color: textColor)),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 0),
+                          // Make the whole tile clickable to navigate
+                          onTap: () =>
+                              context.push('/groups/${group.id}/calendar'),
+                          trailing: IconButton(
+                            icon: Icon(Icons.settings,
+                                size: 16, color: textColor?.withOpacity(0.3)),
+                            onPressed: () {}, // Settings placeholder
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    // Placeholder for "Other Calendars" section if needed
+                    ExpansionTile(
+                      title: Text(
+                          AppLocalizations.of(context)!.otherCalendarsTitle,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: textColor)),
+                      initiallyExpanded: true,
+                      iconColor: textColor?.withOpacity(0.7),
+                      collapsedIconColor: textColor?.withOpacity(0.7),
+                      children: [
+                        ListTile(
+                          dense: true,
+                          leading: Icon(Icons.check_box_outline_blank,
+                              color: textColor?.withOpacity(0.38)),
+                          title: Text(
+                              AppLocalizations.of(context)!.holidaysLabel,
+                              style: TextStyle(
+                                  color: textColor?.withOpacity(0.7))),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),

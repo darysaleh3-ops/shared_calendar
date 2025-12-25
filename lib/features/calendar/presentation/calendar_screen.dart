@@ -90,35 +90,43 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
               if (isWide) {
                 // Desktop / Web Layout
-                return Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: SingleChildScrollView(
-                        child: _buildCalendar(eventsMap),
-                      ),
-                    ),
-                    const VerticalDivider(width: 1, color: Color(0xFF5F6368)),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              _selectedDay != null
-                                  ? '${_selectedDay!.day}/${_selectedDay!.month}/${_selectedDay!.year}'
-                                  : AppLocalizations.of(context)!
-                                      .noDateSelected,
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
+                return Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: SingleChildScrollView(
+                            child: _buildCalendar(eventsMap),
                           ),
-                          Expanded(child: _buildEventList(selectedEvents)),
-                        ],
-                      ),
+                        ),
+                        const VerticalDivider(
+                            width: 1, color: Color(0xFF5F6368)),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  _selectedDay != null
+                                      ? '${_selectedDay!.day}/${_selectedDay!.month}/${_selectedDay!.year}'
+                                      : AppLocalizations.of(context)!
+                                          .noDateSelected,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                              ),
+                              Expanded(child: _buildEventList(selectedEvents)),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 );
               } else {
                 // Mobile Layout

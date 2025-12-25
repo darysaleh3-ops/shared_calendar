@@ -24,55 +24,60 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.registerTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.nameLabel),
-                validator: (value) => value!.isEmpty
-                    ? AppLocalizations.of(context)!.enterNameError
-                    : null,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.nameLabel),
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.enterNameError
+                        : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.emailLabel),
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.enterEmailError
+                        : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.passwordLabel),
+                    obscureText: true,
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.enterPasswordError
+                        : null,
+                  ),
+                  const SizedBox(height: 24),
+                  if (state.isLoading)
+                    const CircularProgressIndicator()
+                  else
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ref.read(authControllerProvider.notifier).register(
+                                _emailController.text,
+                                _passwordController.text,
+                                _nameController.text,
+                              );
+                        }
+                      },
+                      child: Text(AppLocalizations.of(context)!.registerButton),
+                    ),
+                ],
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.emailLabel),
-                validator: (value) => value!.isEmpty
-                    ? AppLocalizations.of(context)!.enterEmailError
-                    : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.passwordLabel),
-                obscureText: true,
-                validator: (value) => value!.isEmpty
-                    ? AppLocalizations.of(context)!.enterPasswordError
-                    : null,
-              ),
-              const SizedBox(height: 24),
-              if (state.isLoading)
-                const CircularProgressIndicator()
-              else
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ref.read(authControllerProvider.notifier).register(
-                            _emailController.text,
-                            _passwordController.text,
-                            _nameController.text,
-                          );
-                    }
-                  },
-                  child: Text(AppLocalizations.of(context)!.registerButton),
-                ),
-            ],
+            ),
           ),
         ),
       ),

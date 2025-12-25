@@ -52,64 +52,73 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 }
               },
             );
-            return Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 40),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 120,
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 40),
+                      Image.asset(
+                        'assets/images/logo.png',
+                        height: 120,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        '2025',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.emailLabel),
+                        validator: (value) => value!.isEmpty
+                            ? AppLocalizations.of(context)!.enterEmailError
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.passwordLabel),
+                        obscureText: true,
+                        validator: (value) => value!.isEmpty
+                            ? AppLocalizations.of(context)!.enterPasswordError
+                            : null,
+                      ),
+                      const SizedBox(height: 24),
+                      if (state.isLoading)
+                        const CircularProgressIndicator()
+                      else
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ref.read(authControllerProvider.notifier).login(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  );
+                            }
+                          },
+                          child:
+                              Text(AppLocalizations.of(context)!.loginButton),
+                        ),
+                      TextButton(
+                        onPressed: () => context.push('/register'),
+                        child:
+                            Text(AppLocalizations.of(context)!.registerPrompt),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '2025',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.emailLabel),
-                    validator: (value) => value!.isEmpty
-                        ? AppLocalizations.of(context)!.enterEmailError
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.passwordLabel),
-                    obscureText: true,
-                    validator: (value) => value!.isEmpty
-                        ? AppLocalizations.of(context)!.enterPasswordError
-                        : null,
-                  ),
-                  const SizedBox(height: 24),
-                  if (state.isLoading)
-                    const CircularProgressIndicator()
-                  else
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ref.read(authControllerProvider.notifier).login(
-                                _emailController.text,
-                                _passwordController.text,
-                              );
-                        }
-                      },
-                      child: Text(AppLocalizations.of(context)!.loginButton),
-                    ),
-                  TextButton(
-                    onPressed: () => context.push('/register'),
-                    child: Text(AppLocalizations.of(context)!.registerPrompt),
-                  ),
-                ],
+                ),
               ),
             );
           },
