@@ -34,13 +34,9 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Shared Calendar',
-      theme:
-          ThemeData(useMaterial3: false, brightness: Brightness.light).copyWith(
-          // ... theme config ...
-      ),
-      themeMode: ThemeMode.light, // Switch to Light Mode
-      locale: locale, // Dynamic Locale
-      localizationsDelegates: const [
+      theme: ThemeData(
+        useMaterial3: false,
+        brightness: Brightness.light,
         splashFactory: NoSplash.splashFactory, // Disable InkSparkle
         scaffoldBackgroundColor: Colors.white,
         colorScheme: const ColorScheme.light(
@@ -126,9 +122,8 @@ class MainApp extends ConsumerWidget {
           color: Color(0xFF64748B),
         ), // Slate 500
       ),
-
-      themeMode: ThemeMode.light, // Switch to Light Mode
-      // locale is now handled above in build method
+      themeMode: ThemeMode.light,
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -139,7 +134,7 @@ class MainApp extends ConsumerWidget {
         Locale('en'), // English
         Locale('ar'), // Arabic
       ],
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

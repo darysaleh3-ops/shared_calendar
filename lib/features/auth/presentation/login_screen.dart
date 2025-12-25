@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/manual_localizations.dart';
-import '../../core/localization/locale_controller.dart';
+import '../../../core/localization/locale_controller.dart';
 import 'auth_controller.dart';
 
 import '../domain/auth_user.dart';
