@@ -5,6 +5,7 @@ import 'l10n/manual_localizations.dart';
 
 import 'core/router/router.dart';
 import 'core/notifications/notification_service.dart';
+import 'core/localization/locale_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,13 +29,18 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(routerProvider);
+    final locale = ref.watch(localeControllerProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Shared Calendar',
       theme:
           ThemeData(useMaterial3: false, brightness: Brightness.light).copyWith(
+          // ... theme config ...
+      ),
+      themeMode: ThemeMode.light, // Switch to Light Mode
+      locale: locale, // Dynamic Locale
+      localizationsDelegates: const [
         splashFactory: NoSplash.splashFactory, // Disable InkSparkle
         scaffoldBackgroundColor: Colors.white,
         colorScheme: const ColorScheme.light(
@@ -122,7 +128,7 @@ class MainApp extends ConsumerWidget {
       ),
 
       themeMode: ThemeMode.light, // Switch to Light Mode
-      locale: const Locale('ar'), // Force Arabic
+      // locale is now handled above in build method
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

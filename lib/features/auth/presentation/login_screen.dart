@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/manual_localizations.dart';
+import '../../core/localization/locale_controller.dart';
 import 'auth_controller.dart';
 
 import '../domain/auth_user.dart';
@@ -23,7 +24,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.loginTitle)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.loginTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            onPressed: () {
+              ref.read(localeControllerProvider.notifier).toggleLocale();
+            },
+            tooltip: 'Switch Language / تغيير اللغة',
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Consumer(

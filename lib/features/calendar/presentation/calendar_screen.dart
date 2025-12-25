@@ -7,6 +7,7 @@ import '../domain/event.dart';
 import '../../auth/domain/auth_user.dart';
 import '../../../l10n/manual_localizations.dart';
 import '../../auth/presentation/auth_controller.dart';
+import '../../../core/localization/locale_controller.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
   final String groupId;
@@ -37,6 +38,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           error: (_, __) => Text(AppLocalizations.of(context)!.calendarTitle),
         ),
         actions: [
+          // Language Toggle
+          IconButton(
+            icon: const Icon(Icons.language),
+            tooltip: 'Switch Language',
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggleLocale(),
+          ),
+
           // View Members (Everyone)
           IconButton(
             icon: const Icon(Icons.group),
