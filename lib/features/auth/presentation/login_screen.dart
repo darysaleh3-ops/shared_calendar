@@ -49,12 +49,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     height: 120,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     '2025',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent, // Or a color matching the logo
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const SizedBox(height: 40),

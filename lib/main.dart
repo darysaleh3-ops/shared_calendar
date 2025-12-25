@@ -120,67 +120,7 @@ class MainApp extends ConsumerWidget {
           color: Color(0xFF64748B),
         ), // Slate 500
       ),
-      darkTheme:
-          ThemeData(useMaterial3: false, brightness: Brightness.dark).copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF38BDF8), // Sky 400
-          secondary: Color(0xFF818CF8), // Indigo 400
-          surface: Color(0xFF1E293B), // Slate 800
-        ),
-        cardTheme: CardThemeData(
-          color: const Color(0xFF1E293B),
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        dialogTheme: DialogThemeData(
-          backgroundColor: const Color(0xFF1E293B),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: const Color(0xFF334155), // Slate 700
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFF6366F1),
-              width: 2,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF818CF8),
-            textStyle: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF6366F1),
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 12,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
+
       themeMode: ThemeMode.light, // Switch to Light Mode
       localizationsDelegates: const [
         AppLocalizations.delegate,
