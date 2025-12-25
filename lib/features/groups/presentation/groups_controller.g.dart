@@ -306,7 +306,7 @@ class _GroupMembersProviderElement
   String get groupId => (origin as GroupMembersProvider).groupId;
 }
 
-String _$groupsControllerHash() => r'd539e396f96fcad1e57e5427fafb6b968ea194fe';
+String _$groupsControllerHash() => r'c340edad35f2b66bed6bb4aadb6ace67fa2ec00c';
 
 /// See also [GroupsController].
 @ProviderFor(GroupsController)

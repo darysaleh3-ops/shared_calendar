@@ -134,106 +134,141 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     );
   }
 
-  // Google Calendar Colors (Material Design)
+  // Vibrant Dribbble-style Colors
   final List<Color> _eventColors = const [
-    Color(0xFF8AB4F8), // Cornflower Blue
-    Color(0xFF33B679), // Sage
-    Color(0xFFD50000), // Tomato
-    Color(0xFFE67C73), // Flamingo
-    Color(0xFF7986CB), // Lavender
-    Color(0xFF0F9D58), // Basil
+    Color(0xFF818CF8), // Indigo
+    Color(0xFFA78BFA), // Violet
+    Color(0xFFF472B6), // Pink
+    Color(0xFF34D399), // Emerald
+    Color(0xFF60A5FA), // Blue
+    Color(0xFFFBBF24), // Amber
   ];
 
   Widget _buildCalendar(Map<DateTime, List<CalendarEvent>> eventsMap) {
-    return TableCalendar<CalendarEvent>(
-      firstDay: DateTime.utc(2020, 10, 16),
-      lastDay: DateTime.utc(2030, 3, 14),
-      focusedDay: _focusedDay,
-      calendarFormat: _calendarFormat,
-      eventLoader: (day) => eventsMap[_normalizeDate(day)] ?? [],
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-      onDaySelected: (selectedDay, focusedDay) {
-        setState(() {
-          _selectedDay = selectedDay;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E293B), // Slate 800
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TableCalendar<CalendarEvent>(
+        firstDay: DateTime.utc(2020, 10, 16),
+        lastDay: DateTime.utc(2030, 3, 14),
+        focusedDay: _focusedDay,
+        calendarFormat: _calendarFormat,
+        eventLoader: (day) => eventsMap[_normalizeDate(day)] ?? [],
+        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+        onDaySelected: (selectedDay, focusedDay) {
+          setState(() {
+            _selectedDay = selectedDay;
+            _focusedDay = focusedDay;
+          });
+        },
+        onFormatChanged: (format) {
+          setState(() {
+            _calendarFormat = format;
+          });
+        },
+        onPageChanged: (focusedDay) {
           _focusedDay = focusedDay;
-        });
-      },
-      onFormatChanged: (format) {
-        setState(() {
-          _calendarFormat = format;
-        });
-      },
-      onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
-      },
-      // Styles
-      shouldFillViewport: false,
-      headerStyle: const HeaderStyle(
-        titleCentered: true,
-        formatButtonVisible: false,
-        titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white70),
-        rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white70),
-      ),
-      calendarStyle: const CalendarStyle(
-        outsideDaysVisible: true,
-        weekendTextStyle: TextStyle(color: Color(0xFFE67C73)), // Flamingo
-        defaultTextStyle: TextStyle(color: Colors.white),
-        markersMaxCount: 4,
-        markerSize: 6.0,
-      ),
-      calendarBuilders: CalendarBuilders(
-        todayBuilder: (context, day, focusedDay) {
-          return Container(
-            margin: const EdgeInsets.all(1.0),
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.only(top: 4.0),
-              width: 32,
-              height: 32,
+        },
+        // Styles
+        shouldFillViewport: false,
+        headerStyle: const HeaderStyle(
+          titleCentered: true,
+          formatButtonVisible: false,
+          titleTextStyle: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          leftChevronIcon: Icon(Icons.chevron_left, color: Color(0xFF94A3B8)),
+          rightChevronIcon: Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
+        ),
+        calendarStyle: const CalendarStyle(
+          outsideDaysVisible: false,
+          weekendTextStyle:
+              TextStyle(color: Color(0xFFF472B6)), // Pink for weekend
+          defaultTextStyle: TextStyle(color: Color(0xFFE2E8F0)), // Slate 200
+          markersMaxCount: 4,
+          markerSize: 6.0,
+        ),
+        calendarBuilders: CalendarBuilders(
+          selectedBuilder: (context, day, focusedDay) {
+            return Container(
+              margin: const EdgeInsets.all(6.0),
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: Color(0xFF8AB4F8),
-                shape: BoxShape.circle,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF6366F1), Color(0xFFA855F7)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withOpacity(0.5),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ],
               ),
               child: Text(
                 '${day.day}',
                 style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold),
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
-            ),
-          );
-        },
-        markerBuilder: (context, day, events) {
-          if (events.isEmpty) return null;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: events
-                .take(3)
-                .map((e) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 1.0),
-                      width: 5,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        // Use hash of event title to pick a color, stable across rebuilds
-                        color: _eventColors[
-                            e.hashCode.abs() % _eventColors.length],
-                        shape: BoxShape.circle,
-                      ),
-                    ))
-                .toList(),
-          );
-        },
-        defaultBuilder: (context, day, focusedDay) {
-          return Center(
-              child: Text('${day.day}',
-                  style: const TextStyle(color: Colors.white70)));
-        },
-        outsideBuilder: (context, day, focusedDay) {
-          return Center(
-              child: Text('${day.day}',
-                  style: const TextStyle(color: Colors.white24)));
-        },
+            );
+          },
+          todayBuilder: (context, day, focusedDay) {
+            return Container(
+              margin: const EdgeInsets.all(6.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF6366F1), width: 2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${day.day}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+          markerBuilder: (context, day, events) {
+            if (events.isEmpty) return null;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: events
+                  .take(3)
+                  .map((e) => Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: _eventColors[
+                              e.hashCode.abs() % _eventColors.length],
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: _eventColors[
+                                      e.hashCode.abs() % _eventColors.length]
+                                  .withOpacity(0.6),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            )
+                          ],
+                        ),
+                      ))
+                  .toList(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -252,94 +287,110 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Widget _buildEventList(List<CalendarEvent> events) {
     if (events.isEmpty) {
       return const Center(
-          child: Text('No events.', style: TextStyle(color: Colors.white54)));
+          child: Text('No events.',
+              style: TextStyle(color: Colors.white54, fontSize: 16)));
     }
-    return ListView.builder(
-      padding: const EdgeInsets.all(8.0),
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       itemCount: events.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final event = events[index];
         final color = _eventColors[event.hashCode.abs() % _eventColors.length];
 
-        // Mock time range for UI polish (real data would be used normally)
         final startTime =
             '${event.startDateTime.hour.toString().padLeft(2, '0')}:${event.startDateTime.minute.toString().padLeft(2, '0')}';
         final endTime =
             '${event.endDateTime.hour.toString().padLeft(2, '0')}:${event.endDateTime.minute.toString().padLeft(2, '0')}';
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: InkWell(
-            onTap: () => _showEditEventDialog(context, event),
-            borderRadius: BorderRadius.circular(8.0),
+        return InkWell(
+          onTap: () => _showEditEventDialog(context, event),
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E293B), // Slate 800
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Time Column
-                SizedBox(
-                  width: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
+                // Time Pillar
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
                       startTime,
-                      textAlign: TextAlign.right,
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.white70),
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
-                  ),
+                    Text(
+                      endTime,
+                      style: const TextStyle(
+                          fontSize: 12, color: Color(0xFF94A3B8)), // Slate 400
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
 
-                // Event Card
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8.0),
-                      border:
-                          Border(left: BorderSide(color: color, width: 4.0)),
-                    ),
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          event.title,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: color, // Title matches bar color
-                          ),
-                        ),
-                        if (event.description != null &&
-                            event.description!.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            event.description!,
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.white60),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '$startTime - $endTime',
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.white38),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                // Color Bar
+                Container(
+                  width: 4,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withOpacity(0.5),
+                        blurRadius: 6,
+                      )
+                    ],
                   ),
                 ),
+                const SizedBox(width: 16),
+
+                // Content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      if (event.description != null &&
+                          event.description!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          event.description!,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFFCBD5E1)), // Slate 300
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+
+                // Action
                 IconButton(
-                  icon:
-                      const Icon(Icons.delete, color: Colors.white38, size: 20),
+                  icon: const Icon(Icons.delete_outline,
+                      color: Color(0xFF94A3B8)),
                   onPressed: () => _confirmDelete(context, event),
                 ),
               ],
