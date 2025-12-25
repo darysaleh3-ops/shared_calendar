@@ -36,7 +36,7 @@ class MainApp extends ConsumerWidget {
       theme:
           ThemeData(useMaterial3: false, brightness: Brightness.light).copyWith(
         splashFactory: NoSplash.splashFactory, // Disable InkSparkle
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Slate 50
+        scaffoldBackgroundColor: Colors.white,
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF6366F1), // Indigo 500
           secondary: Color(0xFF818CF8), // Indigo 400
