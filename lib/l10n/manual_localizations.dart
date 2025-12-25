@@ -62,6 +62,7 @@ class AppLocalizations {
       'enterNameError': 'Enter name',
       'enterEmailError': 'Enter email',
       'enterPasswordError': 'Enter password',
+      'noDateSelected': 'No Date Selected',
     },
     'ar': {
       'appTitle': 'التقويم المشترك',
@@ -112,6 +113,7 @@ class AppLocalizations {
       'enterNameError': 'أدخل الاسم',
       'enterEmailError': 'أدخل البريد الإلكتروني',
       'enterPasswordError': 'أدخل كلمة المرور',
+      'noDateSelected': 'لم يتم اختيار تاريخ',
     },
   };
 
@@ -206,6 +208,8 @@ class AppLocalizations {
       _localizedValues[locale.languageCode]!['enterEmailError']!;
   String get enterPasswordError =>
       _localizedValues[locale.languageCode]!['enterPasswordError']!;
+  String get noDateSelected =>
+      _localizedValues[locale.languageCode]!['noDateSelected']!;
 }
 
 class _AppLocalizationsDelegate

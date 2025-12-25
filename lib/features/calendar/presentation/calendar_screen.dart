@@ -100,7 +100,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             child: Text(
                               _selectedDay != null
                                   ? '${_selectedDay!.day}/${_selectedDay!.month}/${_selectedDay!.year}'
-                                  : 'No Date Selected',
+                                  : AppLocalizations.of(context)!
+                                      .noDateSelected,
                               style: Theme.of(context).textTheme.headlineSmall,
                             ),
                           ),
@@ -129,7 +130,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddEventDialog(context),
         icon: const Icon(Icons.add),
-        label: const Text('Add Event'),
+        label: Text(AppLocalizations.of(context)!.addEventTitle),
         backgroundColor: const Color(0xFF8AB4F8),
       ),
     );
@@ -298,9 +299,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   Widget _buildEventList(List<CalendarEvent> events) {
     if (events.isEmpty) {
-      return const Center(
-          child: Text('No events.',
-              style: TextStyle(color: Colors.white54, fontSize: 16)));
+      return Center(
+          child: Text(AppLocalizations.of(context)!.noEventsLabel,
+              style: const TextStyle(color: Colors.black54, fontSize: 16)));
     }
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

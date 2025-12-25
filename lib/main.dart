@@ -122,6 +122,7 @@ class MainApp extends ConsumerWidget {
       ),
 
       themeMode: ThemeMode.light, // Switch to Light Mode
+      locale: const Locale('ar'), // Force Arabic
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
