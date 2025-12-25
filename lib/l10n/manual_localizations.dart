@@ -63,6 +63,13 @@ class AppLocalizations {
       'enterEmailError': 'Enter email',
       'enterPasswordError': 'Enter password',
       'noDateSelected': 'No Date Selected',
+      'loading': 'Loading...',
+      'error': 'Error: ',
+      'closeButton': 'Close',
+      'noMembersFound': 'No members found.',
+      'noNewUsers': 'No new users available to add.',
+      'memberAdded': 'Member added',
+      'endTimeBeforeStartTime': 'End time must be after start time',
     },
     'ar': {
       'appTitle': 'التقويم المشترك',
@@ -114,6 +121,13 @@ class AppLocalizations {
       'enterEmailError': 'أدخل البريد الإلكتروني',
       'enterPasswordError': 'أدخل كلمة المرور',
       'noDateSelected': 'لم يتم اختيار تاريخ',
+      'loading': 'جاري التحميل...',
+      'error': 'خطأ: ',
+      'closeButton': 'إغلاق',
+      'noMembersFound': 'لم يتم العثور على أعضاء.',
+      'noNewUsers': 'لا يوجد مستخدمين جدد للإضافة.',
+      'memberAdded': 'تمت إضافة العضو',
+      'endTimeBeforeStartTime': 'وقت الانتهاء يجب أن يكون بعد وقت البدء',
     },
   };
 
@@ -210,6 +224,18 @@ class AppLocalizations {
       _localizedValues[locale.languageCode]!['enterPasswordError']!;
   String get noDateSelected =>
       _localizedValues[locale.languageCode]!['noDateSelected']!;
+  String get loading => _localizedValues[locale.languageCode]!['loading']!;
+  String get error => _localizedValues[locale.languageCode]!['error']!;
+  String get closeButton =>
+      _localizedValues[locale.languageCode]!['closeButton']!;
+  String get noMembersFound =>
+      _localizedValues[locale.languageCode]!['noMembersFound']!;
+  String get noNewUsers =>
+      _localizedValues[locale.languageCode]!['noNewUsers']!;
+  String get memberAdded =>
+      _localizedValues[locale.languageCode]!['memberAdded']!;
+  String get endTimeBeforeStartTime =>
+      _localizedValues[locale.languageCode]!['endTimeBeforeStartTime']!;
 }
 
 class _AppLocalizationsDelegate

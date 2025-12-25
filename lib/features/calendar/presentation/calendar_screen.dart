@@ -33,8 +33,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       appBar: AppBar(
         title: groupAsync.when(
           data: (group) => Text(group?.name ?? 'Calendar'),
-          loading: () => const Text('Loading...'),
-          error: (_, __) => const Text('Calendar'),
+          loading: () => Text(AppLocalizations.of(context)!.loading),
+          error: (_, __) => Text(AppLocalizations.of(context)!.calendarTitle),
         ),
         actions: [
           // View Members (Everyone)
@@ -125,7 +125,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) =>
+            Center(child: Text('${AppLocalizations.of(context)!.error}$err')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddEventDialog(context),
@@ -524,9 +525,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       // Basic validation
                       if (endDateTime.isBefore(startDateTime)) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text('End time must be after start time')),
+                          SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .endTimeBeforeStartTime)),
                         );
                         return;
                       }
@@ -720,7 +721,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     .toList();
 
                 if (availableToAdd.isEmpty) {
-                  return const Text('No new users available to add.');
+                  return Text(AppLocalizations.of(context)!.noNewUsers);
                 }
 
                 return DropdownButtonFormField<AuthUser>(
@@ -737,7 +738,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               loading: () => const SizedBox(
                   height: 50,
                   child: Center(child: CircularProgressIndicator())),
-              error: (e, st) => Text('Error: $e'),
+              error: (e, st) =>
+                  Text('${AppLocalizations.of(context)!.error}$e'),
             );
           },
         ),
@@ -755,14 +757,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       .addMember(widget.groupId, selectedUser!.email);
                   if (context.mounted) {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Member added')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context)!.memberAdded)));
                   }
                 } catch (e) {
                   if (context.mounted) {
                     // Don't close dialog on error, let user try again
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Error: $e')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text('${AppLocalizations.of(context)!.error}$e')));
                   }
                 }
               }
@@ -787,7 +791,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   ref.watch(groupMembersProvider(widget.groupId));
               return membersAsync.when(
                 data: (members) {
-                  if (members.isEmpty) return const Text('No members found.');
+                  if (members.isEmpty)
+                    return Text(AppLocalizations.of(context)!.noMembersFound);
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: members.length,
@@ -806,7 +811,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 loading: () => const SizedBox(
                     height: 100,
                     child: Center(child: CircularProgressIndicator())),
-                error: (e, st) => Text('Error: $e'),
+                error: (e, st) =>
+                    Text('${AppLocalizations.of(context)!.error}$e'),
               );
             },
           ),
@@ -814,7 +820,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: Text(AppLocalizations.of(context)!.closeButton),
           ),
         ],
       ),

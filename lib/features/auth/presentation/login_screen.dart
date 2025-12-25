@@ -33,7 +33,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               (previous, next) {
                 if (next.hasError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: ${next.error}')),
+                    SnackBar(
+                        content: Text(
+                            '${AppLocalizations.of(context)!.error}${next.error}')),
                   );
                 }
               },
@@ -62,7 +64,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.emailLabel),
-                    validator: (value) => value!.isEmpty ? 'Enter email' : null,
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.enterEmailError
+                        : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -70,8 +74,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.passwordLabel),
                     obscureText: true,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Enter password' : null,
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.enterPasswordError
+                        : null,
                   ),
                   const SizedBox(height: 24),
                   if (state.isLoading)

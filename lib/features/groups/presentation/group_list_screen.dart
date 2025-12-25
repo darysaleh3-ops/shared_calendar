@@ -16,7 +16,9 @@ class GroupListScreen extends ConsumerWidget {
     ref.listen(groupsControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${next.error}')),
+          SnackBar(
+              content:
+                  Text('${AppLocalizations.of(context)!.error}${next.error}')),
         );
       }
     });
@@ -141,7 +143,9 @@ class GroupListScreen extends ConsumerWidget {
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
+                      SnackBar(
+                          content:
+                              Text('${AppLocalizations.of(context)!.error}$e')),
                     );
                   }
                 }
