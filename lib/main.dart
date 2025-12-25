@@ -19,10 +19,7 @@ void main() async {
   }
 
   runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const MainApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const MainApp()),
   );
 }
 
@@ -36,7 +33,9 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Shared Calendar',
-      theme: ThemeData.light().copyWith(
+      theme:
+          ThemeData(useMaterial3: false, brightness: Brightness.light).copyWith(
+        splashFactory: NoSplash.splashFactory, // Disable InkSparkle
         scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Slate 50
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF6366F1), // Indigo 500
@@ -48,13 +47,15 @@ class MainApp extends ConsumerWidget {
           color: Colors.white,
           elevation: 2,
           shadowColor: Colors.black.withOpacity(0.05),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
         dialogTheme: DialogThemeData(
           backgroundColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           titleTextStyle: const TextStyle(
             color: Color(0xFF0F172A),
             fontSize: 20,
@@ -66,19 +67,30 @@ class MainApp extends ConsumerWidget {
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE2E8F0)), // Slate 200
+            borderSide: const BorderSide(
+              color: Color(0xFFE2E8F0),
+            ), // Slate 200
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE2E8F0)), // Slate 200
+            borderSide: const BorderSide(
+              color: Color(0xFFE2E8F0),
+            ), // Slate 200
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
+            borderSide: const BorderSide(
+              color: Color(0xFF6366F1),
+              width: 2,
+            ),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          labelStyle: const TextStyle(color: Color(0xFF64748B)), // Slate 500
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          labelStyle: const TextStyle(
+            color: Color(0xFF64748B),
+          ), // Slate 500
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -90,15 +102,22 @@ class MainApp extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF6366F1),
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 12,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF64748B)), // Slate 500
+        iconTheme: const IconThemeData(
+          color: Color(0xFF64748B),
+        ), // Slate 500
       ),
-      darkTheme: ThemeData.dark().copyWith(
+      darkTheme:
+          ThemeData(useMaterial3: false, brightness: Brightness.dark).copyWith(
         scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFF38BDF8), // Sky 400
@@ -108,13 +127,15 @@ class MainApp extends ConsumerWidget {
         cardTheme: CardThemeData(
           color: const Color(0xFF1E293B),
           elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
         dialogTheme: DialogThemeData(
           backgroundColor: const Color(0xFF1E293B),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
@@ -125,10 +146,15 @@ class MainApp extends ConsumerWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
+            borderSide: const BorderSide(
+              color: Color(0xFF6366F1),
+              width: 2,
+            ),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -140,9 +166,13 @@ class MainApp extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF6366F1),
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 12,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
